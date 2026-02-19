@@ -21,6 +21,7 @@ The system is modular, scalable, and designed for future AI-driven personalizati
 
 ## 🏗 Architecture
 React Frontend → FastAPI Backend → Database (SQLite/PostgreSQL)
+
 ↓
 AI / ML Module
 
