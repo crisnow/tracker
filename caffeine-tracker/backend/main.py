@@ -13,7 +13,7 @@ class Fruits(BaseModel):
 app = FastAPI(debug=True)
 
 origins = [
-    "http://localhost:3000",
+    "http://localhost:5175",
     # Add more origins here
 ]
 
