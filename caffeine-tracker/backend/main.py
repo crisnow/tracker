@@ -3,17 +3,20 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List
+from datetime import datetime  
 
-class Fruit(BaseModel):
+class Drink(BaseModel):
     name: str
+    caffeine_mg: float
+    timestamp: datetime | None = None
 
-class Fruits(BaseModel):
-    fruits: List[Fruit]
+class Drinks(BaseModel):
+    drinks: List[Drink]
     
 app = FastAPI(debug=True)
 
 origins = [
-    "http://localhost:5175",
+    "http://localhost:5173",
     # Add more origins here
 ]
 
@@ -25,16 +28,22 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-memory_db = {"fruits": []}
+memory_db = {"drinks": []}
 
-@app.get("/fruits", response_model=Fruits)
-def get_fruits():
-    return Fruits(fruits=memory_db["fruits"])
+#---- routes ----#
 
-@app.post("/fruits")
-def add_fruit(fruit: Fruit):
-    memory_db["fruits"].append(fruit)
-    return fruit
+@app.get("/")
+def root():
+    return
+
+@app.get("/drinks", response_model=Drinks)
+def get_drinks():
+    return Drinks(drinks=memory_db["drinks"])
+
+@app.post("/drinks")
+def add_drink(drink: Drink):
+    memory_db["drinks"].append(drink)
+    return drink
     
 
 if __name__ == "__main__":
