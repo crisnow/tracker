@@ -1,110 +1,97 @@
-# ☕ AI-Native Caffeine Tracker
+# ☕ Caffeine Tracker
 
-An AI-powered full-stack caffeine tracking application built with **React (frontend)** and **FastAPI (backend)**.
+A small full-stack application for recording caffeine consumption and reviewing daily and weekly intake. It uses a React frontend and a FastAPI backend.
 
-This project demonstrates **end-to-end product ownership**, **AI-native architecture**, and **rapid iteration**, inspired by modern startup engineering culture.
+## What it does
 
----
+The backend currently supports:
 
-## 🚀 Overview
+- Logging a drink with its name, caffeine amount (in milligrams), and an optional timestamp
+- Listing all recorded drinks
+- Calculating today's caffeine total
+- Calculating the total caffeine consumed in the past seven days and the corresponding daily average
 
-The AI-Native Caffeine Tracker allows users to:
+Drink data is kept in memory, so it is cleared whenever the backend restarts.
 
-- Log caffeine consumption
-- Track daily and weekly intake
-- Visualize behavioral trends
-- Receive AI-generated insights
+## Project structure
 
-The system is modular, scalable, and designed for future AI-driven personalization.
+```text
+caffeine-tracker/
+├── backend/              # FastAPI API
+│   ├── main.py
+│   └── requirements.txt
+└── frontend/             # React + Vite application
+    └── src/
+```
 
----
+## API
 
-## 🏗 Architecture
-React Frontend → FastAPI Backend → Database (SQLite/PostgreSQL)
+Run the backend locally at `http://localhost:8000`.
 
-↓
-AI / ML Module
+| Method | Endpoint | Description |
+| --- | --- | --- |
+| `GET` | `/drinks` | Return all logged drinks. |
+| `POST` | `/drinks` | Create a drink entry. |
+| `GET` | `/summary` | Return caffeine totals for today and the last seven days. |
 
+### Create a drink
 
-### **Frontend**
-- React (functional components + hooks)
-- Axios / Fetch API
-- Chart.js or Recharts for visualizations
+```bash
+curl -X POST http://localhost:8000/drinks \
+  -H 'Content-Type: application/json' \
+  -d '{"name":"Coffee","caffeine_mg":95}'
+```
 
-### **Backend**
-- FastAPI (Python)
-- Pydantic for request validation
-- SQLAlchemy ORM
-- SQLite (MVP) or PostgreSQL (production)
+The timestamp is optional. When omitted, the API records the current UTC time.
 
-### **AI Layer**
-- Python analytics module
-- Pattern detection (overconsumption, timing trends)
-- Optional LLM integration for personalized feedback
+Example response:
 
----
+```json
+{
+  "name": "Coffee",
+  "caffeine_mg": 95,
+  "timestamp": "2026-11-16T09:00:00Z"
+}
+```
 
-## ✨ Core Features
+### Get a summary
 
-### **1️⃣ Drink Logging**
-- Record drink type
-- Track caffeine amount (mg)
-- Store timestamp
-- Backend validation with FastAPI
+```json
+{
+  "today_total": 95,
+  "week_total": 95,
+  "avg_daily": 13.57
+}
+```
 
-### **2️⃣ Consumption History**
-- Retrieve all drinks
-- Filter by date
-- Clean tabular display
-
-### **3️⃣ Daily & Weekly Summary**
-- Automatic aggregation
-- Weekly trend analysis
-- Comparison against recommended limit (400mg/day)
-
-### **4️⃣ AI-Powered Insights**
-- Detect late-day caffeine patterns
-- Identify excessive intake trends
-- Generate personalized behavioral suggestions
-
-Example:
-
-> "You consistently consume caffeine after 4pm. Consider reducing intake to improve sleep quality."
-
----
-
-## 📡 API Endpoints
-
-### `POST /drinks`
-Create a new drink entry.
-
-### `GET /drinks`
-Retrieve all logged drinks.
-
-### `GET /summary`
-Return aggregated daily and weekly intake.
-
-### `GET /recommendations`
-Return AI-generated insights.
-
----
-
-## 🧠 Design Principles
-
-- **AI-first architecture**
-- **End-to-end ownership**
-- **Clean API contracts**
-- **Rapid iteration ready**
-- **Modular & extensible**
-
----
-
-## 🛠 Local Development
+## Run locally
 
 ### Backend
 
 ```bash
-cd backend
+cd caffeine-tracker/backend
+python -m venv venv
+source venv/bin/activate
 pip install -r requirements.txt
 uvicorn main:app --reload
+```
+
+Interactive API documentation is available at `http://localhost:8000/docs`.
+
+### Frontend
+
+```bash
+cd caffeine-tracker/frontend
+npm install
+npm run dev
+```
+
+The included frontend is currently a starter UI that still references a fruit-management example. It needs to be updated to call the caffeine endpoints above before it can be used as the tracker interface.
+
+## Planned improvements
+
+- Replace in-memory storage with SQLite or PostgreSQL
+- Build the drink-entry, history, and summary screens in the React frontend
+- Add date filtering and charts
+- Add personalized caffeine-use insights
 
