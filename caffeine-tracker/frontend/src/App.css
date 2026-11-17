@@ -1,42 +1,77 @@
-#root {
-  max-width: 1280px;
+.app-shell {
+  width: min(900px, calc(100% - 2rem));
   margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  padding: 4.5rem 0;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
+header { margin-bottom: 2rem; }
+h1, h2, p { margin-top: 0; }
+h1 { max-width: 640px; margin-bottom: .75rem; font-size: clamp(2.2rem, 6vw, 4.25rem); line-height: 1.02; letter-spacing: -.06em; }
+h2 { margin-bottom: 1.25rem; font-size: 1.25rem; }
+.eyebrow { margin-bottom: .5rem; color: var(--coffee); font-size: .8rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+.intro { color: var(--cocoa); font-size: 1.1rem; }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
+.summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1rem; }
+.summary-grid article, .panel { border: 1px solid #e5d1bc; border-radius: 16px; background: #fffdfa; box-shadow: 0 4px 15px rgb(67 38 23 / 6%); }
+.summary-grid article { padding: 1.25rem; }
+.summary-grid span { display: block; margin-bottom: .35rem; color: var(--cocoa); font-size: .85rem; }
+.summary-grid strong { color: var(--espresso); font-size: clamp(1.5rem, 4vw, 2.2rem); letter-spacing: -.05em; }
+.summary-grid small { font-size: .8rem; letter-spacing: 0; }
+.panel { padding: 1.5rem; margin-bottom: 1rem; }
+.recommendation { display: flex; gap: 1rem; margin-bottom: 1rem; padding: 1.25rem 1.5rem; border: 1px solid #dfba96; border-radius: 16px; background: #f5e4d1; }
+.recommendation-icon { display: grid; flex: 0 0 2.5rem; place-items: center; width: 2.5rem; height: 2.5rem; border-radius: 50%; background: #e8c39a; font-size: 1.25rem; }
+.recommendation .eyebrow { margin-bottom: .25rem; }
+.recommendation h2 { margin-bottom: .4rem; color: var(--espresso); font-size: 1.1rem; }
+.recommendation p:not(.eyebrow) { margin-bottom: .5rem; color: var(--roast); }
+.recommendation a { color: var(--roast); font-size: .85rem; font-weight: 700; }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
+.drink-form { display: grid; grid-template-columns: 1.4fr .8fr minmax(150px, 1fr) auto; align-items: end; gap: 1rem; }
+.selected-date { grid-column: 1 / -1; margin: 0; color: var(--coffee); font-size: .9rem; }
+label { display: grid; gap: .4rem; color: var(--roast); font-size: .9rem; font-weight: 700; }
+label span { color: var(--cocoa); font-size: .78rem; font-weight: 400; }
+input { box-sizing: border-box; width: 100%; padding: .72rem .8rem; border: 1px solid #d5b99d; border-radius: 8px; color: var(--espresso); background: #fffdfa; font: inherit; }
+input:focus { outline: 3px solid #f1d5b8; border-color: var(--caramel); }
+button { min-height: 42px; padding: .7rem 1rem; border: 0; border-radius: 8px; color: #fff; background: var(--coffee); font: inherit; font-weight: 700; cursor: pointer; }
+button:hover { background: var(--espresso); }
+button:disabled { cursor: wait; opacity: .7; }
+.secondary-button { min-height: auto; padding: .4rem .65rem; color: var(--roast); background: var(--foam); font-size: .85rem; }
+.secondary-button:hover { background: #ecd4bb; }
+.section-heading { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.section-heading h2 { margin-bottom: 0; }
+.drink-list { margin: 1.25rem 0 0; padding: 0; list-style: none; }
+.drink-list li { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .9rem 0; border-top: 1px solid #efe0d0; }
+.drink-details { display: flex; align-items: center; gap: .75rem; min-width: 0; }
+.drink-meta { display: grid; gap: .15rem; min-width: 0; }
+.drink-photo { width: 44px; height: 44px; flex: 0 0 44px; border-radius: 8px; object-fit: cover; }
+.drink-list span, .empty-state { color: var(--cocoa); font-size: .9rem; }
+.drink-list b { white-space: nowrap; color: var(--coffee); }
+.empty-state { margin: 1.25rem 0 0; }
+.error-message { margin-bottom: 1rem; padding: .8rem 1rem; border-radius: 8px; color: #8c2626; background: #fdeaea; }
+.section-description { margin: .25rem 0 0; color: var(--cocoa); font-size: .85rem; }
+.insights-grid { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); gap: 1rem; }
+.chart-panel, .calendar-panel { margin-bottom: 0; }
+.bar-chart { display: grid; grid-template-columns: repeat(7, 1fr); align-items: end; gap: .5rem; height: 190px; margin-top: 1.5rem; }
+.bar-column { display: grid; grid-template-rows: 1.2rem 1fr 1.2rem; align-items: end; height: 100%; gap: .35rem; min-width: 0; color: var(--cocoa); font-size: .7rem; text-align: center; }
+.bar-value { overflow: hidden; color: var(--coffee); font-size: .68rem; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
+.bar-track { height: 100%; display: flex; align-items: end; overflow: hidden; border-radius: 5px 5px 2px 2px; background: var(--foam); }
+.bar-fill { width: 100%; border-radius: 5px 5px 2px 2px; background: var(--caramel); transition: height .2s ease; }
+.weekday-labels, .calendar-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); }
+.weekday-labels { gap: .3rem; margin-top: 1.25rem; color: var(--cocoa); font-size: .7rem; font-weight: 700; text-align: center; }
+.calendar-grid { gap: .3rem; margin-top: .3rem; }
+.calendar-day { display: flex; flex-direction: column; justify-content: space-between; aspect-ratio: 1.05; min-height: 0; padding: .35rem; border: 0; border-radius: 7px; background: #faf1e7; color: var(--roast); font: inherit; font-size: .76rem; text-align: left; }
+.calendar-day:not(.blank) { cursor: pointer; }
+.calendar-day:not(.blank):hover { background: #efcfad; }
+.calendar-day.has-caffeine { background: #f0d1ae; color: var(--roast); }
+.calendar-day.today { outline: 2px solid var(--caramel); outline-offset: -2px; }
+.calendar-day b { font-size: clamp(.5rem, 1.4vw, .7rem); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.calendar-day.blank { background: transparent; }
 
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
+@media (max-width: 650px) {
+  .app-shell { padding: 2.5rem 0; }
+  .summary-grid { grid-template-columns: 1fr; gap: .65rem; }
+  .summary-grid article { display: flex; align-items: baseline; justify-content: space-between; padding: 1rem 1.25rem; }
+  .summary-grid span { margin: 0; }
+  .drink-form { grid-template-columns: 1fr; }
+  .insights-grid { grid-template-columns: 1fr; }
+  .recommendation { padding: 1rem; }
 }

@@ -1,14 +1,18 @@
 import uvicorn
-from fastapi import FastAPI
+from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from typing import List, Optional
 from datetime import datetime, timedelta, timezone
+from pathlib import Path
+from uuid import uuid4
 
 class Drink(BaseModel):
     name: str
     caffeine_mg: float
     timestamp: Optional[datetime] = None
+    photo_url: Optional[str] = None
 
 class Drinks(BaseModel):
     drinks: List[Drink]
@@ -19,7 +23,22 @@ class Summary(BaseModel):
     avg_daily: float
 
 
+class PhotoUpload(BaseModel):
+    url: str
+
+
 app = FastAPI(debug=True)
+
+UPLOAD_DIR = Path(__file__).parent / "uploads"
+UPLOAD_DIR.mkdir(exist_ok=True)
+app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
+
+IMAGE_EXTENSIONS = {
+    "image/jpeg": ".jpg",
+    "image/png": ".png",
+    "image/webp": ".webp",
+}
+MAX_IMAGE_SIZE = 5 * 1024 * 1024
 
 origins = [
     "http://localhost:5173",
@@ -53,7 +72,24 @@ def add_drink(drink: Drink):
 
     memory_db["drinks"].append(drink)
     return drink
-    
+
+
+@app.post("/uploads", response_model=PhotoUpload)
+async def upload_photo(photo: UploadFile = File(...)):
+    extension = IMAGE_EXTENSIONS.get(photo.content_type)
+    if extension is None:
+        raise HTTPException(status_code=400, detail="Please upload a JPEG, PNG, or WebP image.")
+
+    contents = await photo.read()
+    if len(contents) > MAX_IMAGE_SIZE:
+        raise HTTPException(status_code=400, detail="Images must be 5 MB or smaller.")
+
+    filename = f"{uuid4().hex}{extension}"
+    (UPLOAD_DIR / filename).write_bytes(contents)
+    await photo.close()
+
+    return PhotoUpload(url=f"/uploads/{filename}")
+
 
 @app.get("/summary", response_model=Summary)
 def get_summary():
